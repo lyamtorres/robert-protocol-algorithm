@@ -1,5 +1,5 @@
 struct Maillon {
-    std::string data;
+    char donnees;
     Maillon *suivant;
 };
 
@@ -9,12 +9,20 @@ struct ListeChainee {
     Maillon *queue;
 };
 
-// Retourne une liste chaînée avec un seul élément
-ListeChainee initialiser();
+// Utilisé une seule fois pour initialiser une liste chaînée avec un maillon
+ListeChainee initialiser(char d);
 
 void afficherListe(ListeChainee l);
 
-void insererEnTete(ListeChainee &l);
+// Précondition: Le chaînage doit être initialisé
+void insererEnTete(ListeChainee &l, char d);
 
+// Précondition: Le chaînage doit être initialisé
+void insererEnQueue(ListeChainee &l, char d);
+
+// Précondition: Le chaînage doit contenir au moins un maillon
 void supprimerEnTete(ListeChainee &l);
+
+// Précondition: Le chaînage doit contenir au moins un maillon
+void supprimerEnQueue(ListeChainee &l);
 
