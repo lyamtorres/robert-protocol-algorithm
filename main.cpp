@@ -10,12 +10,17 @@
 using namespace std;
 
 int main() {
-    ListeChainee liste;
+    ListeChainee premiereliste;
 
-    liste = initialiser('A');
-    afficherListe(liste);
-    insererEnQueue(liste, 'B');
-    afficherListe(liste);
+// Test pour insererAvant
+    premiereliste = initialiser('C');
+    insererAvant(premiereliste, 'B');
+    insererAvant(premiereliste, 'A');
+    afficherListe(premiereliste);
+
+    supprimerFin(premiereliste);
+    afficherListe(premiereliste);
+    
 
     return 0;
 }
@@ -24,7 +29,7 @@ ListeChainee initialiser(char d) {
     ListeChainee nouvelleListe;
     Maillon *premierMaillon = new Maillon;
 
-    premierMaillon->donnees = d;
+    premierMaillon->donnee = d;
     premierMaillon->suivant = nullptr;
 
     nouvelleListe.tete = premierMaillon;
@@ -34,47 +39,58 @@ ListeChainee initialiser(char d) {
     return nouvelleListe;
 }
 
-void afficherListe(ListeChainee l) {
-    Maillon *actuel = l.tete;
+void afficherListe(ListeChainee liste) {
+    Maillon *actuel = liste.tete;
 
     cout << "Tête -> ";
     while (actuel != nullptr) {
-        cout << actuel->donnees << " -> ";
+        cout << actuel->donnee << " -> ";
         actuel = actuel->suivant;
     }
     cout << "NULL" << endl;
 }
 
-void insererEnTete(ListeChainee &l, char d) {
-    Maillon *nouveauMaillon = new Maillon;
+// Complexité temporelle : Constante = O(1)
+void insererAvant(ListeChainee &liste, char d) {
+    Maillon *nouveauMaillon = new Maillon; // +2
 
-    nouveauMaillon->donnees = d;
-    nouveauMaillon->suivant = l.tete;
+    nouveauMaillon->donnee = d; // +2
+    nouveauMaillon->suivant = liste.tete; // +3
 
-    l.tete = nouveauMaillon;
-    l.nombreElements += 1;
+    liste.tete = nouveauMaillon; // +2
+    liste.nombreElements++;
 }
 
-void insererEnQueue(ListeChainee &l, char d) {
+// Complexité temporelle : Constante = O(1)
+void insererFin(ListeChainee &liste, char d) {
     Maillon *nouveauMaillon = new Maillon;
 
-    nouveauMaillon->donnees = d;
+    nouveauMaillon->donnee = d;
     nouveauMaillon->suivant = nullptr;
-    if(l.nombreElements = 0) {
-        l.tete = nouveauMaillon;
-    } else {
-        l.queue->suivant = nouveauMaillon;
-    }
+    liste.queue->suivant = nouveauMaillon;
+    liste.queue = nouveauMaillon;
+    liste.nombreElements++;
 }
 
-void supprimerEnTete(ListeChainee &l) {
-    Maillon *aSupprimer = l.tete;
+// Complexité temporelle : Constante = O(1)
+void supprimerDebut(ListeChainee &liste) {
+    Maillon *aSupprimer = liste.tete;
 
-    l.tete = l.tete->suivant;
+    liste.tete = liste.tete->suivant;
     delete aSupprimer;
-    l.nombreElements -= 1;
+    liste.nombreElements--;
 }
 
-void supprimerEnQueue(ListeChainee &l) {
-    
+// Complexité temporelle : Lineaire = O(n)
+void supprimerFin(ListeChainee &liste) {
+    Maillon *actuel = liste.tete;
+    Maillon *aSupprimer = liste.queue;
+
+    while (actuel->suivant != liste.queue) {
+        actuel = actuel->suivant;
+    }
+    liste.queue = actuel;
+    actuel->suivant = nullptr;
+    delete aSupprimer;
+    liste.nombreElements--;
 }
