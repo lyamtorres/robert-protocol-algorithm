@@ -1,28 +1,34 @@
-struct Maillon {
-    char donnee;
-    Maillon *suivant;
+struct Pseudo {
+    std::string valeur;
+    Pseudo *suivant;
 };
 
-struct ListeChainee {
-    int nombreElements;
-    Maillon *tete;
-    Maillon *queue;
+struct Telephone {
+    int capacite;
+    int espaceOccupe;
+    Pseudo *tete;
+    Pseudo *queue;
 };
 
-// Utilisé une seule fois pour initialiser une liste chaînée avec un maillon
-ListeChainee initialiser(char d);
+// Précondition : memoire > 0
+Telephone initialiserTelephone(int memoire);
 
-void afficherListe(ListeChainee liste);
+void afficherListe(Telephone tel);
 
-// Précondition: Le chaînage doit être initialisé
-void insererAvant(ListeChainee &liste, char d);
+// Précondition : tel.espaceOccupe < tel.capacite
+void rechargerListe(Telephone &tel, int seuil);
 
-// Précondition: Le chaînage doit être initialisé
-void insererFin(ListeChainee &liste, char d);
+// Précondition : Le chaînage doit être initialisé
+void insererPseudoAvant(Telephone &tel);
 
-// Précondition: Le chaînage doit contenir au moins deux maillons
-void supprimerDebut(ListeChainee &liste);
+// Précondition : Le chaînage doit être initialisé
+void insererPseudoFin(Telephone &tel);
 
-// Précondition: Le chaînage doit contenir au moins deux maillons
-void supprimerFin(ListeChainee &liste);
+// Précondition : Le chaînage doit contenir au moins deux Pseudos
+void supprimerPseudoDebut(Telephone &tel);
+
+// Précondition : Le chaînage doit contenir au moins deux Pseudos
+void supprimerPseudoFin(Telephone &tel);
+
+std::string donnerPseudonyme();
 

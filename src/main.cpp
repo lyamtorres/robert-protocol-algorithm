@@ -5,92 +5,127 @@
  */
 
 #include <iostream>
+#include <random>
+#include <ctime> 
 #include "main.h"
 
 using namespace std;
 
 int main() {
-    ListeChainee premiereliste;
-
-// Test pour insererAvant
-    premiereliste = initialiser('C');
-    insererAvant(premiereliste, 'B');
-    insererAvant(premiereliste, 'A');
-    afficherListe(premiereliste);
-
-    supprimerFin(premiereliste);
-    afficherListe(premiereliste);
+    srand(time(0));
     
+    const int seuil = 4;
 
+    Telephone premierTelephone;
+    premierTelephone = initialiserTelephone(5);
+    afficherListe(premierTelephone);
+    supprimerPseudoFin(premierTelephone);
+    supprimerPseudoFin(premierTelephone);
+    afficherListe(premierTelephone);
+    rechargerListe(premierTelephone, seuil);
+    afficherListe(premierTelephone);
+    
     return 0;
 }
 
-ListeChainee initialiser(char d) {
-    ListeChainee nouvelleListe;
-    Maillon *premierMaillon = new Maillon;
+Telephone initialiserTelephone(int memoire) {
+    const int seuil = 4;
+    Telephone nouveauTelephone;
+    
+    nouveauTelephone.capacite = memoire;
+    nouveauTelephone.espaceOccupe = 0;
+    for (int i = 0; i < nouveauTelephone.capacite; i++) {
+        insererPseudoFin(nouveauTelephone);
+    }
 
-    premierMaillon->donnee = d;
-    premierMaillon->suivant = nullptr;
-
-    nouvelleListe.tete = premierMaillon;
-    nouvelleListe.queue = premierMaillon;
-    nouvelleListe.nombreElements = 1;
-
-    return nouvelleListe;
+    return nouveauTelephone;
 }
 
-void afficherListe(ListeChainee liste) {
-    Maillon *actuel = liste.tete;
+void afficherListe(Telephone tel) {
+    Pseudo *actuel = tel.tete;
 
     cout << "Tête -> ";
     while (actuel != nullptr) {
-        cout << actuel->donnee << " -> ";
+        cout << actuel->valeur << " -> ";
         actuel = actuel->suivant;
     }
     cout << "NULL" << endl;
 }
 
-// Complexité temporelle : Constante = O(1)
-void insererAvant(ListeChainee &liste, char d) {
-    Maillon *nouveauMaillon = new Maillon; // +2
-
-    nouveauMaillon->donnee = d; // +2
-    nouveauMaillon->suivant = liste.tete; // +3
-
-    liste.tete = nouveauMaillon; // +2
-    liste.nombreElements++;
+void rechargerListe(Telephone &tel, int seuil) {
+    if (tel.espaceOccupe < seuil) {
+        while (tel.espaceOccupe != tel.capacite) {
+            insererPseudoFin(tel);
+        }
+    }
 }
 
 // Complexité temporelle : Constante = O(1)
-void insererFin(ListeChainee &liste, char d) {
-    Maillon *nouveauMaillon = new Maillon;
+void insererPseudoAvant(Telephone &tel) {
+    Pseudo *nouveauPseudo = new Pseudo;
 
-    nouveauMaillon->donnee = d;
-    nouveauMaillon->suivant = nullptr;
-    liste.queue->suivant = nouveauMaillon;
-    liste.queue = nouveauMaillon;
-    liste.nombreElements++;
+    nouveauPseudo->valeur = donnerPseudonyme();
+    nouveauPseudo->suivant = nullptr;
+    if (tel.espaceOccupe == 0) {
+        tel.tete = nouveauPseudo;
+        tel.queue = nouveauPseudo;
+    } else {
+        nouveauPseudo->suivant = tel.tete;
+        tel.tete = nouveauPseudo;
+    }   
+    tel.espaceOccupe++;
 }
 
 // Complexité temporelle : Constante = O(1)
-void supprimerDebut(ListeChainee &liste) {
-    Maillon *aSupprimer = liste.tete;
+void insererPseudoFin(Telephone &tel) {
+    Pseudo *nouveauPseudo = new Pseudo;
 
-    liste.tete = liste.tete->suivant;
+    nouveauPseudo->valeur = donnerPseudonyme();
+    nouveauPseudo->suivant = nullptr;
+    if (tel.espaceOccupe == 0) {
+        tel.tete = nouveauPseudo;
+        tel.queue = nouveauPseudo;
+    } else {
+        tel.queue->suivant = nouveauPseudo;
+        tel.queue = nouveauPseudo;
+    }
+    tel.espaceOccupe++;
+}
+
+// Complexité temporelle : Constante = O(1)
+void supprimerPseudoDebut(Telephone &tel) {
+    Pseudo *aSupprimer = tel.tete;
+
+    tel.tete = tel.tete->suivant;
     delete aSupprimer;
-    liste.nombreElements--;
+    tel.espaceOccupe--;
 }
 
 // Complexité temporelle : Lineaire = O(n)
-void supprimerFin(ListeChainee &liste) {
-    Maillon *actuel = liste.tete;
-    Maillon *aSupprimer = liste.queue;
+void supprimerPseudoFin(Telephone &tel) {
+    Pseudo *actuel = tel.tete;
+    Pseudo *aSupprimer = tel.queue;
 
-    while (actuel->suivant != liste.queue) {
+    while (actuel->suivant != tel.queue) {
         actuel = actuel->suivant;
     }
-    liste.queue = actuel;
+    tel.queue = actuel;
     actuel->suivant = nullptr;
     delete aSupprimer;
-    liste.nombreElements--;
+    tel.espaceOccupe--;
+}
+
+string donnerPseudonyme() {
+  string pseudonyme = "";
+  char consonne[20] = {'b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','z'};
+  char voyelle[6] = {'a','e','i','o','u','y'};
+
+  for (int i = 0; i < 2; i++){                    
+    pseudonyme = pseudonyme + consonne[rand() % 20];    
+    pseudonyme = pseudonyme + voyelle[rand() % 6];      
+  }
+  for (int i = 0; i < 2; i++){                   
+    pseudonyme = pseudonyme + to_string(rand() % 9);      
+  }
+  return pseudonyme;
 }
