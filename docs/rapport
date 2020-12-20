@@ -1,0 +1,177 @@
+QUESTION 0
+
+insererDebut :  Complexité temporelle : Lineaire = O(n)
+
+Code :
+ListeChainee liste;
+liste = initialiser();
+afficher(liste);
+insererDebut(liste);
+afficher(liste);
+
+Affichage :
+Tête -> A -> NULL
+Tête -> B -> A -> NULL
+
+insererFin : Complexité temporelle : Constante = O(1)
+
+Code :
+ListeChainee liste;
+liste = initialiser();
+afficher(liste);
+insererFin(liste);
+afficher(liste);
+
+Affichage :
+Tête -> A -> NULL
+Tête -> A -> B -> NULL
+
+supprimerDebut : Complexité temporelle : Constante = O(1)
+
+Code :
+ListeChainee liste;
+liste = initialiser();
+insererFin(liste);
+insererFin(liste);
+afficher(liste);
+supprimerDebut(liste);
+afficher(liste);
+
+Affichage :
+Tête -> A -> B-> B-> NULL
+Tête -> B -> B -> NULL
+
+supprimerFin : Complexité temporelle : Lineaire = O(n)
+ 
+Code :
+ListeChainee liste;
+liste = initialiser();
+insererFin(liste);
+insererFin(liste);
+afficher(liste);
+supprimerFin(liste);
+afficher(liste);
+
+Affichage :
+Tête -> A -> B-> B-> NULL
+Tête -> A -> B -> NULL
+
+QUESTION 1
+
+a) initialiserTelephone : 
+ 
+Code :
+    Telephone nokia;
+    nokia = initialiserTelephone(4);
+    afficherListe(nokia);
+
+Affichage :
+Tête -> fuwe57 -> jame54 -> nefu60 -> qupi66 -> NULL
+
+Conclusion: Une liste de 4 pseudonymes se crée correctement.
+
+b) supprimerPseudo : 
+
+Code :
+    Telephone nokia;
+    nokia = initialiserTelephone(5);
+    afficherListe(nokia);
+    supprimerPseudo(nokia);
+    afficherListe(nokia);
+
+Affichage :
+Tête -> fuwe57 -> jame54 -> nefu60 -> qupi66 -> dide11 -> NULL
+Tête -> jame54 -> nefu60 -> qupi66 -> dide11 -> NULL
+
+Conclusion: Un pseudonyme se supprime correctement.
+
+c) rechargerListe : 
+
+Code :
+    const int seuil = 4;
+    nokia = initialiserTelephone(5);
+    supprimerPseudo(nokia);
+    supprimerPseudo(nokia);
+    afficherListe(nokia);
+    rechargerListe(nokia, seuil);
+    afficherListe(nokia);
+
+Affichage :
+Tête -> nefu60 -> qupi66 -> dide11 -> NULL
+Tête -> nefu60 -> qupi66 -> dide11 -> mada53 -> rupu60 -> NULL
+
+Conclusion: Quand le nombre d'éléments est inférieur au seuil, les pseudonymes se rechargent jusqu'à la limite de la mémoire. 
+
+QUESTION 2
+
+a) integrerContacts : 
+
+Code :
+    srand(time(0));
+    ListeDeContacts listeAnahi;
+    listeAnahi.tete = nullptr;
+    integrerContacts(listeAnahi, 12, 12, 2020);
+    afficherContacts(listeAnahi);
+
+Affichage :
+Tête -> firy35 -> june07 -> nipe10 -> buci10 -> bopo56 -> dyra53 -> lego11 -> NULL
+
+Conclusion: À chaque execution, un chainage avec differentes quantités de pseudos s'affichent.
+
+a) supprimerContacts : 
+
+Code :
+    srand(time(0));
+    Date aujourdhui;
+    aujourdhui.jour = 15; aujourdhui.mois = 1; aujourdhui.an = 2021; 
+    ListeDeContacts listeAnahi;
+    listeAnahi.tete = nullptr;
+    integrerContacts(listeAnahi, 12, 12, 2020);
+    integrerContacts(listeAnahi, 12, 1, 2021);
+    afficherContacts(listeAnahi);
+    supprimerContacts(listeAnahi, aujourdhui);
+    afficherContacts(listeAnahi);s
+
+Affichage :
+Tête -> juzi76 -> zube62 -> nypi63 -> xora73 -> hety05 -> sytu45 -> byfy11 -> pary34 -> cajy58 -> NULL
+Tête -> sytu45 -> byfy11 -> pary34 -> cajy58 -> NULL
+
+Conclusion: Efface toutes les contacts correspondants au 12/12/2020 vu que c'est plus de 14 jours d'ancienetée.
+
+
+QUESTION 3
+
+a) integrerContacts : 
+
+Code :
+    srand(time(0));
+    ListeDeContacts listeAnahi;
+    listeAnahi.tete = nullptr;
+    integrerContacts(listeAnahi, 12, 12, 2020);
+    afficherContacts(listeAnahi);
+
+Affichage :
+Tête -> firy35 -> june07 -> nipe10 -> buci10 -> bopo56 -> dyra53 -> lego11 -> NULL
+
+Conclusion: À chaque execution, un chainage avec differentes quantités de pseudos s'affichent.
+
+a) supprimerContacts : 
+
+Code :
+    Date aujourdhui;
+    aujourdhui.jour = 15; aujourdhui.mois = 1; aujourdhui.an = 2021; 
+    ListeDeContacts listeAnahi;
+    listeAnahi.tete = nullptr;
+    integrerContacts(listeAnahi, 12, 12, 2020);
+    integrerContacts(listeAnahi, 12, 1, 2021);
+    afficherContacts(listeAnahi);
+    supprimerContacts(listeAnahi, aujourdhui);
+    afficherContacts(listeAnahi);
+
+Affichage :
+Tête -> juzi76 -> zube62 -> nypi63 -> xora73 -> hety05 -> sytu45 -> byfy11 -> pary34 -> cajy58 -> NULL
+Tête -> sytu45 -> byfy11 -> pary34 -> cajy58 -> NULL
+
+Conclusion: Efface toutes les contacts correspondants au 12/12/2020 vu que c'est plus de 14 jours d'ancienetée. 
+
+

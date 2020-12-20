@@ -2,7 +2,7 @@
 
             Robert Protocol Algorithm - DIALLO Fatoumata et TORRES Lyam
 
- */
+*/
 
 #include <iostream>
 #include <random>
@@ -11,77 +11,105 @@
 
 using namespace std;
 
-const int joursDuMois[12]
-    = { 31, 28, 31, 30, 31, 30, 
-       31, 31, 30, 31, 30, 31 };
+const int joursDuMois[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+ 
 
 int main() {
-    srand(time(0));
-
-/*     Telephone samsungAlice = initialiserTelephone(5);
-    Telephone iphoneCharles = initialiserTelephone(5);
-
-    afficherListe(samsungAlice);
-    afficherListe(iphoneCharles); */
-
-    ListeDeContacts contactsAlice;
-    Date maDate;
-    Date maDate2;
-    Date maDate3;
-    Date maDate4;
-
-    maDate.jour = 1;
-    maDate.mois = 1;
-    maDate.an = 2021;
-
-    maDate2.jour = 3;
-    maDate2.mois = 1;
-    maDate2.an = 2021;
-
-    maDate3.jour = 28;
-    maDate3.mois = 1;
-    maDate3.an = 2021;
-
-    maDate4.jour = 29;
-    maDate4.mois = 1;
-    maDate4.an = 2021;
+            // QUESTION 4 - PROGRAMME PRINCIPAL
 
 
-    contactsAlice.tete = nullptr;
+    Utilisateur charles, alice;
 
-    integrerContacts(contactsAlice, maDate);
-    integrerContacts(contactsAlice, maDate2);
-    integrerContacts(contactsAlice, maDate3);
+    charles.monTel = initialiserTelephone(5);
+    alice.monTel = initialiserTelephone(5);
 
-    afficherContacts(contactsAlice);
+    cout << "Pseudos Charles : ";
+    afficherListe(charles.monTel);
+    cout << "Pseudos Alice : ";
+    afficherListe(alice.monTel);
 
-    supprimerContact(contactsAlice, maDate4);
+    alice.maListe.tete = nullptr;
+    integrerContacts(alice.maListe, 2, 11, 2020);
+    integrerContacts(alice.maListe, 7, 11, 2020);
+    cout << "Contacts Alice : ";
+    afficherContacts(alice.maListe);
 
-    afficherContacts(contactsAlice);
+    ListeDeContacts listeGlobale;
 
-/*     supprimerPlusieurs(contactsAlice, maDate4);
-    supprimerPlusieurs(contactsAlice, maDate4);
-    supprimerPlusieurs(contactsAlice, maDate4);
-    supprimerPlusieurs(contactsAlice, maDate4);
-
-    supprimerPlusieurs(contactsAlice, maDate4);
-    supprimerPlusieurs(contactsAlice, maDate4); */
-
-
-/*     supprimerContact(contactsAlice);
-    afficherContacts(contactsAlice); */
+    listeGlobale.tete = nullptr;
+    fusionnerListes(listeGlobale, alice.maListe, false);
+    cout << "Application centrale: ";
+    afficherContacts(listeGlobale);
 
     return 0;
 }
 
+ListeChainee initialiser() {
+    ListeChainee nouvelleListe;
+    Maillon *nouveauMaillon = new Maillon;
+
+    nouveauMaillon->valeur = 'A';
+    nouveauMaillon->suivant = nullptr;
+    nouvelleListe.tete = nouveauMaillon;
+    nouvelleListe.queue = nouveauMaillon;
+
+    return nouvelleListe;
+}
+
+void afficher(ListeChainee liste) {
+    Maillon *actuel = liste.tete;
+
+    cout << "Tête -> ";
+    while (actuel != nullptr) {
+        cout << actuel->valeur << " -> ";
+        actuel = actuel->suivant;
+    }
+    cout << "NULL" << endl;
+}
+
+void insererDebut(ListeChainee &liste) {
+    Maillon *nouveauMaillon = new Maillon;
+
+    nouveauMaillon->valeur = 'B';
+    nouveauMaillon->suivant = liste.tete;
+    liste.tete = nouveauMaillon;
+}
+
+void insererFin(ListeChainee &liste) {
+    Maillon *nouveauMaillon = new Maillon;
+
+    nouveauMaillon->valeur = 'B';
+    nouveauMaillon->suivant = nullptr;
+    liste.queue->suivant = nouveauMaillon;
+    liste.queue = nouveauMaillon;
+}
+
+void supprimerDebut(ListeChainee &liste) {
+    Maillon *aSupprimer = liste.tete;
+
+    liste.tete = liste.tete->suivant;
+    delete aSupprimer;
+}
+
+void supprimerFin(ListeChainee &liste) {
+    Maillon *actuel = liste.tete;
+    Maillon *aSupprimer = liste.queue;
+
+    while (actuel->suivant != liste.queue) {
+        actuel = actuel->suivant;
+    }
+    liste.queue = actuel;
+    actuel->suivant = nullptr;
+    delete aSupprimer;
+}
+
 Telephone initialiserTelephone(int memoire) {
-    const int seuil = 4;
     Telephone nouveauTelephone;
     
     nouveauTelephone.capacite = memoire;
     nouveauTelephone.espaceOccupe = 0;
     for (int i = 0; i < nouveauTelephone.capacite; i++) {
-        insererPseudoFin(nouveauTelephone);
+        insererPseudo(nouveauTelephone);
     }
 
     return nouveauTelephone;
@@ -101,29 +129,12 @@ void afficherListe(Telephone tel) {
 void rechargerListe(Telephone &tel, int seuil) {
     if (tel.espaceOccupe < seuil) {
         while (tel.espaceOccupe != tel.capacite) {
-            insererPseudoFin(tel);
+            insererPseudo(tel);
         }
     }
 }
 
-// Complexité temporelle : Constante = O(1)
-void insererPseudoAvant(Telephone &tel) {
-    Pseudo *nouveauPseudo = new Pseudo;
-
-    nouveauPseudo->valeur = donnerPseudonyme();
-    nouveauPseudo->suivant = nullptr;
-    if (tel.espaceOccupe == 0) {
-        tel.tete = nouveauPseudo;
-        tel.queue = nouveauPseudo;
-    } else {
-        nouveauPseudo->suivant = tel.tete;
-        tel.tete = nouveauPseudo;
-    }   
-    tel.espaceOccupe++;
-}
-
-// Complexité temporelle : Constante = O(1)
-void insererPseudoFin(Telephone &tel) {
+void insererPseudo(Telephone &tel) {
     Pseudo *nouveauPseudo = new Pseudo;
 
     nouveauPseudo->valeur = donnerPseudonyme();
@@ -138,25 +149,10 @@ void insererPseudoFin(Telephone &tel) {
     tel.espaceOccupe++;
 }
 
-// Complexité temporelle : Constante = O(1)
-void supprimerPseudoDebut(Telephone &tel) {
+void supprimerPseudo(Telephone &tel) {
     Pseudo *aSupprimer = tel.tete;
 
     tel.tete = tel.tete->suivant;
-    delete aSupprimer;
-    tel.espaceOccupe--;
-}
-
-// Complexité temporelle : Lineaire = O(n)
-void supprimerPseudoFin(Telephone &tel) {
-    Pseudo *actuel = tel.tete;
-    Pseudo *aSupprimer = tel.queue;
-
-    while (actuel->suivant != tel.queue) {
-        actuel = actuel->suivant;
-    }
-    tel.queue = actuel;
-    actuel->suivant = nullptr;
     delete aSupprimer;
     tel.espaceOccupe--;
 }
@@ -176,28 +172,30 @@ string donnerPseudonyme() {
   return pseudonyme;
 }
 
-void integrerContacts(ListeDeContacts &liste, Date dateDuJour) {
+void integrerContacts(ListeDeContacts &liste, int jour, int mois, int annee) {
     Contact nouveauContact;
-    //int contactsDuJour = rand() % 20;
+    int contactsDuJour = rand() % 20;
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < contactsDuJour; i++) {
         nouveauContact.pseudo1 = donnerPseudonyme();
         nouveauContact.pseudo2 = donnerPseudonyme();
-        nouveauContact.date = dateDuJour;
-        genererMaillonContact(liste, nouveauContact);
+        nouveauContact.date.jour = jour;
+        nouveauContact.date.mois = mois;
+        nouveauContact.date.an = annee;
+        genererContact(liste, nouveauContact);
     }
 }
 
-void genererMaillonContact(ListeDeContacts &liste, Contact cont) {
+void genererContact(ListeDeContacts &liste, Contact cont) {
     MaillonContact *nouveauMaillon;
     
     nouveauMaillon = new MaillonContact;
     nouveauMaillon->contact = cont;
     nouveauMaillon->suivant = nullptr;
-    insererMaillonContact(liste, nouveauMaillon);
+    insererContact(liste, nouveauMaillon);
 }
 
-void insererMaillonContact(ListeDeContacts &liste, MaillonContact *maille) {
+void insererContact(ListeDeContacts &liste, MaillonContact *maille) {
     MaillonContact *actuel; // actuel correspond à l'élément où l'on est positionés dans la liste
 
     if (liste.tete == nullptr) {
@@ -211,15 +209,15 @@ void insererMaillonContact(ListeDeContacts &liste, MaillonContact *maille) {
     }
 }
 
-void supprimerContacts(ListeDeContacts &liste, Date dateDuJour) {
+void supprimerContacts(ListeDeContacts &liste, Date date) {
     MaillonContact *aSupprimer;
-    int nombreJours = calculerDifference(liste.tete->contact.date, dateDuJour);
+    int nombreJours = calculerDifference(liste.tete->contact.date, date);
     
     do {
         aSupprimer = liste.tete;
         liste.tete = liste.tete->suivant;
         delete aSupprimer;
-        nombreJours = calculerDifference(liste.tete->contact.date, dateDuJour);
+        nombreJours = calculerDifference(liste.tete->contact.date, date);
     } while (nombreJours > 14);
 
 }
@@ -260,5 +258,16 @@ void afficherContacts(ListeDeContacts liste) {
     cout << "NULL" << endl;
 }
 
+void fusionnerListes(ListeDeContacts &listeAppli, ListeDeContacts listeContacts, bool estMalade) {
+    MaillonContact *actuel;
 
-// Commande pour compiler : g++ main.cpp -o main.exe
+    if (listeAppli.tete == nullptr) {
+        listeAppli.tete = listeContacts.tete; 
+    } else {
+        actuel = listeAppli.tete;
+        while (actuel->suivant != nullptr) {
+            actuel = actuel->suivant;
+        }
+        actuel->suivant = listeContacts.tete;
+    }
+}
